@@ -1,11 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/python:0-3.9
 
-# install starship
-RUN wget https://starship.rs/install.sh && \
-    chmod +x install.sh && \
-    ./install.sh --yes && \
-    rm install.sh
-
 #install terraform
 RUN version='1.4.1'; \
     curl "https://releases.hashicorp.com/terraform/${version}/terraform_${version}_linux_amd64.zip" -o "terraform.zip" && \
