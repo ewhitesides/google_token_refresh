@@ -29,12 +29,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push docker image to Amazon ECR
-        context: './app' #where the Dockerfile is located
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: abcs_token
           GITHUB_SHA: ${{ github.sha }}
         run: |
+          cd app
           docker image build --tag $env:IMAGE_NAME:$GITHUB_SHA .
           docker image tag $env:IMAGE_NAME:$GITHUB_SHA $REGISTRY/$REPOSITORY:$GITHUB_SHA
           docker image tag $env:IMAGE_NAME:$GITHUB_SHA $REGISTRY/$REPOSITORY:latest
