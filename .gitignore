@@ -3,6 +3,7 @@
 !.gitignore
 !.devcontainer
 !.vscode
+!.github
 
 #ignore json files, except devcontainer.json
 *.json
