@@ -41,3 +41,4 @@ jobs:
           docker image tag $IMAGE_NAME:$GITHUB_SHA $REGISTRY/$REPOSITORY:latest
           docker image push $REGISTRY/$REPOSITORY:$GITHUB_SHA
           docker image push $REGISTRY/$REPOSITORY:latest
+
