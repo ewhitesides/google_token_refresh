@@ -1,0 +1,42 @@
+name: Build and Push Docker image to Amazon ECR
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: google_token_refresh
+  AWS_DEFAULT_REGION: us-east-2
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: my-github-actions-role #by providing non-existing role just uses access key/secret
+          aws-region: $env:AWS_DEFAULT_REGION
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        context: './app' #where the Dockerfile is located
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: abcs_token
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          docker image build --tag $env:IMAGE_NAME:$GITHUB_SHA .
+          docker image tag $env:IMAGE_NAME:$GITHUB_SHA $REGISTRY/$REPOSITORY:$GITHUB_SHA
+          docker image tag $env:IMAGE_NAME:$GITHUB_SHA $REGISTRY/$REPOSITORY:latest
+          docker image push $REGISTRY/$REPOSITORY:$GITHUB_SHA
+          docker image push $REGISTRY/$REPOSITORY:latest
