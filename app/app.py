@@ -5,6 +5,7 @@ app
 import os
 from funcs import get_secret, refresh_token, set_secret
 
+
 def handler(event,context):
     """
     main function called by container
