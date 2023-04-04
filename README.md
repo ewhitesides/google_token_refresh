@@ -1,6 +1,43 @@
 # Overview
 
-python code to refresh an oauth2 token, or create a new one if it does not exist
+python code to refresh a google oauth2 token, or create a new one if it does not exist
+
+## Steps to create the initial oauth2 credential
+
+in google, do the following
+
+- in console.cloud.google.com, create a new project
+- in APIs & Services, enable a google service
+- in APIs & Services > Credentials > Create Credentials
+  - choose OAuth client ID > Desktop App > Create
+  - download the google oauth json file with the client id and client secret
+- in APIs & Services > OAuth consent screen > Test users, add your gmail account as a test user
+
+in aws console, do the following
+
+- navigate to secrets manager
+- click store a new secret with name 'ggloauthcred' > other type of secret > plaintext
+- paste in the contents of the google oauth json file
+- click store a new secret with name 'ggloauthtoken' (leave empty)
+
+clone this repo locally, then in the repo
+create .devcontainer/devcontainer.env file with contents:
+
+```bash
+AWS_SECRET_PATH_GOOGLE_CRED=path/to/ggloauthcred
+AWS_SECRET_PATH_GOOGLE_TOKEN=path/to/ggloauthtoken
+AWS_DEFAULT_REGION=your-region-here
+
+#the following vars are used in boto3 in the python script
+#when running in production the lambda function should have access to the locations in aws secretsmanager
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+```
+
+- open the repo in vscode as a devcontainer
+- run the debug task 'debug app.handler'
+- on first run it should prompt you with a web browser to allow the app to access your google account
+- future runs of the debug task should just refresh the token without requiring the web page consent
 
 ## Run lambda container locally
 
