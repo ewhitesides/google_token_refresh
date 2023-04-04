@@ -41,6 +41,8 @@ AWS_SECRET_ACCESS_KEY=your-secret-access-key
 
 ## Run lambda container locally
 
+the following should be done outside of the vscode devcontainer
+
 ```bash
 #change to app folder where lambda Dockerfile is
 cd app
