@@ -75,7 +75,7 @@ def refresh_token(creds_data: dict, token_data: dict) -> str:
                 'https://www.googleapis.com/auth/calendar.events'
             ]
         )
-        flow_output = flow.run_local_server(port=8080)
+        flow_output = flow.run_local_server(port=0)
         token_item = TokenItem(
             token = flow_output.token,
             refresh_token = flow_output.refresh_token,
